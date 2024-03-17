@@ -1,0 +1,19 @@
+version: "3.3"
+
+services:
+  marsy-mock-service:
+    image: "nestjs-marsy/marsy-mock"
+    restart: always
+    ports:
+      - 3005:3000
+    environment:
+      - MARSY_TELEMETRY_SERVICE_URL_WITH_PORT=${MARSY_TELEMETRY_SERVICE}:3000
+      - MARSY_MISSION_SERVICE_URL_WITH_PORT=${MARSY_MISSION_SERVICE}:3000
+      - MARSY_GUIDANCE_SERVICE_URL_WITH_PORT=${MARSY_GUIDANCE_SERVICE}:3000
+    networks:
+      - nestjs-marsy-network
+    external_links:
+      - docker-compose-kafka-service:kafka-service:kafka-service
+networks:
+  nestjs-marsy-network:
+    driver: bridge

@@ -1,0 +1,32 @@
+version: "3.3"
+
+services:
+  marsy-telemetry-service:
+    image: "nestjs-marsy/marsy-telemetry"
+    restart: always
+    ports:
+      - 3004:3000
+    depends_on:
+      - mongo_db_marsy_telemetry
+    environment:
+      - MARSY_MOCK_SERVICE_URL_WITH_PORT=${MARSY_MOCK_SERVICE}:3000
+      - MARSY_LAUNCHPAD_SERVICE_URL_WITH_PORT=${MARSY_LAUNCHPAD_SERVICE}:3000
+      - MARSY_BOOSTER_SERVICE_URL_WITH_PORT=${MARSY_BOOSTER_SERVICE}:3000
+      - MARSY_PAYLOAD_SERVICE_URL_WITH_PORT=${MARSY_PAYLOAD_SERVICE}:3000
+      - MARSY_MISSION_SERVICE_URL_WITH_PORT=${MARSY_MISSION_SERVICE}:3000
+    networks:
+      - nestjs-marsy-network
+    external_links:
+      - docker-compose-kafka-service:kafka-service:kafka-service
+  mongo_db_marsy_telemetry:
+    image: "mongo:4.4.15"
+    restart: always
+    ports:
+      - 27020:27017
+    networks:
+      - nestjs-marsy-network
+    logging:
+      driver: none
+networks:
+  nestjs-marsy-network:
+    driver: bridge

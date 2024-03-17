@@ -1,0 +1,15 @@
+version: "3.3"
+
+services:
+  marsy-weather-service:
+    image: "marsy/marsy-weather"
+    restart: always
+    ports:
+      - 3002:3000
+    networks:
+      - nestjs-marsy-network
+    external_links:
+      - docker-compose-kafka-service:kafka-service:kafka-service
+networks:
+  nestjs-marsy-network:
+    driver: bridge
